@@ -19,10 +19,16 @@ Notes: You will need to specify what MQTT server you would like to use.
 //****************************** SETUP ***************************************//
 // MQTT Setup
 var mqtt   = require('mqtt');
-var client = mqtt.connect('mqtt://hri.stanford.edu',
-                           {port: 8134,
-                            protocolId: 'MQIsdp',
-                            protocolVersion: 3 });
+
+// if you are running the default mosquitto install this will work
+// otherwise, uncomment the code below and change the host and port
+// to match your target mqtt server
+var client = mqtt.connect('mqtt://localhost')
+//var client = mqtt.connect('localhost',
+//                            {port: 1833,
+//                             protocolId: 'MQIsdp',
+//                             protocolVersion: 3 });
+
 // Text to speech setup
 var say = require('say');
 //****************************************************************************//
@@ -56,12 +62,12 @@ client.on('message', function (topic, message) {
 
 //********************** SIMULATED CAN DATA MESSAGES *************************//
 setInterval(function(){
-    //update with some random data every 200 ms
+    //update with some random data every 10 seconds (10000 ms)
     client.publish('can', '{"name":"vss", "value":' +
       Math.floor(Math.random() * 90) +
       '}')
     client.publish('can', '{"name":"rpm", "value":' +
       Math.floor(Math.random() * 6000) +
       '}')
-}, 200);
+}, 10000);
 //****************************************************************************//

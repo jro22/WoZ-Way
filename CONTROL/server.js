@@ -24,16 +24,21 @@ var http = require('http');				// http basics
 var app = express();							// instantiate express server
 var server = http.Server(app);		// connects http library to server
 var io = require('socket.io')(server);	// connect websocket library to server
-var serverPort = 8000;
+var serverPort = 8222;
 
 // MQTT messaging - specify the server you would like to use here
 var mqtt    = require('mqtt');
-var client  = mqtt.connect('mqtt://hri.stanford.edu',
-                           {port: 8134,
-                            protocolId: 'MQIsdp',
-                            protocolVersion: 3 });
-//****************************************************************************//
 
+// if you are running the default mosquitto install this will work
+// otherwise, uncomment the code below and change the host and port
+// to match your target mqtt server
+var client = mqtt.connect('mqtt://localhost')
+//var client = mqtt.connect('localhost',
+//                            {port: 1833,
+//                             protocolId: 'MQIsdp',
+//                             protocolVersion: 3 });
+
+//****************************************************************************//
 
 //****************************** WEB INTERFACE *******************************//
 // use express to create the simple webapp
@@ -50,10 +55,26 @@ server.listen(serverPort, function() {
 // Setup the MQTT connection and listen for messages
 client.on('connect', function () {
   //Subscribe to topics
-  client.subscribe('can'); // CAN data
-  client.subscribe('say'); // Messages to say
+  client.subscribe('can', function (err) {
+    if (err) {
+      console.log('client.subscribe can err')
+    }
+  }); // CAN data
+  client.subscribe('say', function (err) {
+    if (err) {
+      console.log('client.subscribe say err')
+    }
+  }); // Messages to say
+
   console.log("Waiting for messages...");
-  client.publish('say', 'Hello, I am a need finding machine');
+  client.publish('say', 'Hello, I am a need finding machine CONTROL server');
+});
+
+client.on('error', function (error) {
+  //Subscribe to topics
+
+  console.log("error on connect" + error);
+  client.end()
 });
 
 // process the MQTT messages
@@ -79,11 +100,11 @@ client.on('message', function (topic, message) {
 // As long as someone is connected, listen for messages from the wizard
 // interface.
 io.on('connect', function(socket) {
-    console.log('a user connected');
+    console.log('a user connected to the web socket');
 
     // if you get a message to send, send to the MQTT broker
     socket.on('say', function(msg) {
-        console.log(msg);
+        console.log('[say] ' + msg);
         //send it to the mqtt broker
         client.publish('say', msg);
     });

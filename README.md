@@ -15,10 +15,7 @@ forth to the car using a wizard control interface.
 2. A computer with a modern web-browser
 
 ### Message Broker
-WoZ Way used MQTT, a popular publish/subscribe messaging protocol to communicate messages between the car and the control interface. This is done so that only the MQTT broker IP needs to be known. I use a popular and free MQTT broker called Mosquitto [https://mosquitto.org]. You can set up Mosquitto on a Unix based server fairly easily. 
-
-## Hardware Bill of Materials
-A full BOM can be found here: [https://docs.google.com/spreadsheets/d/115VWuHOhQsEnYNJsB6Nx3dnP3QcJT3YXV1De5LtsyNQ/edit?usp=sharing]
+WoZ Way used MQTT, a popular publish/subscribe messaging protocol to communicate messages between the car and the control interface. This is done so that only the MQTT broker IP needs to be known. I use a popular and free MQTT broker called Mosquitto [https://mosquitto.org]. You can set up Mosquitto on a Unix based server fairly easily.
 
 ## Instructions
 1. Make sure you have NodeJS installed on both the CAR computer and the CONTROL server. If you are on a Mac and
@@ -40,7 +37,7 @@ of from the Common Questions area by clicking the buttons.
 7. (Additional) If you can serve the control interface from a known server with a public IP, then you can navigate to `<your.server.ip>:8000`
 
 ### MQTT Setup
-The sample code provided points to an MQTT broker running on a server at Stanford's Center for Design Research. You can use this for testing, however, for your own work, please setup your own MQTT broker and change the ip and port in botht he CAR and CONTROL code to point to your own broker.
+The sample code provided points to an MQTT broker running on the same machine where the control service is running.  We recommend setting up Mosquitto using the Instructions provided at [https://mosquitto.org].
 
 ### Changing Voices on macOS
 
@@ -72,7 +69,5 @@ Nikolas Martelaro and Wendy Ju. 2017. WoZ Way: Enabling Real-time Remote Interac
  publisher = {ACM},
  address = {New York, NY, USA},
  keywords = {design methods, ethnography, interaction design, prototyping, wizard of oz},
-} 
+}
 ```
-
-

@@ -7,6 +7,7 @@
   "author": "Nik Martelaro <nmartelaro@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@google-cloud/speech": "^3.4.0",
     "express": "^4.13.4",
     "mqtt": "^1.7.0",
     "say": "^0.6.0",
