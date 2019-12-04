@@ -92,6 +92,24 @@ socket.on('can-msg', function(msg) {
 			document.getElementById('RPM').innerHTML = Math.round(canData.value);
 			break;
 
+		case 'wake': // wake command detected ('hey autobot')
+			document.getElementById('Wake').style.backgroundColor = "Aqua";
+			document.getElementById('Manual').style.backgroundColor = "transparent";
+			document.getElementById('Autonomous').style.backgroundColor = "transparent";
+			break;
+
+		case 'manual': // manual drive mode command detected ('i will drive now')
+			document.getElementById('Wake').style.backgroundColor = "transparent";
+			document.getElementById('Manual').style.backgroundColor = "Aqua";
+			document.getElementById('Autonomous').style.backgroundColor = "transparent";
+			break;
+
+		case 'autonomous': // auto drive mode command detected ('drive for me')
+			document.getElementById('Wake').style.backgroundColor = "transparent";
+			document.getElementById('Manual').style.backgroundColor = "transparent";
+			document.getElementById('Autonomous').style.backgroundColor = "Aqua";
+			break;
+
 		default:
 			break;
 	}

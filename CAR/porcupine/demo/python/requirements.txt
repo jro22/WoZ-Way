@@ -1,0 +1,5 @@
+numpy
+pyaudio
+soundfile
+json
+requests

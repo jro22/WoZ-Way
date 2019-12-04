@@ -8,8 +8,12 @@ back to the control interface as well as recieve messages from the control
 interface. Theis messageing is handled using and MQTT server in a known
 location.
 
-The server subscribes to MQTT messages from the control interfcae and publishes
+The server subscribes to MQTT messages from the control interface and publishes
 MQTT messages that will the control interface will listen to.
+
+The server also listens for http POST messages from an instance of the
+porcupine wake word engine, which listens for pre trained verbal commands and
+relays them to the control interface by publishing MQTT messages.
 
 Usage: node server.js
 
@@ -32,6 +36,34 @@ var client = mqtt.connect('mqtt://localhost')
 // Text to speech setup
 var say = require('say');
 //****************************************************************************//
+
+// This is port server.js will listen on to receive messages from the
+// Porcupine wake word detection/voice command engine.  Be sure this
+// matches the port porcupine tries to connect on.
+
+var server_port = 3000
+
+var app = require('express')();
+var http = require('http').Server(app);
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.json())
+app.post('/', function(req,res) {
+  var msg = req.body.msg;
+  var cmd = req.body.cmd;
+  console.log("message from porcupine: " + msg);
+  console.log("command from porcupine: " + cmd);  // wake, autonomous, manual
+
+  //update the console status with the most recent recognized command/wake word
+  client.publish('can', '{"name":"' + cmd.toString() + '"}') // wake, autonomous, manual
+
+  // send the caller status saying that their POST was successful
+  res.status(204).send()
+});
+
+http.listen(server_port, function() {
+  console.log('listening on port ' + server_port + '...');
+});
 
 //********************** MQTT MESSAGES WITH ACTIONS **************************//
 // Setup the socket connection and listen for messages
