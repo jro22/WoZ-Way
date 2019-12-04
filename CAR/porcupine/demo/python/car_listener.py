@@ -28,13 +28,17 @@ import soundfile
 import requests
 import json
 
-target_url = "http://localhost:3000"
+# target_url is the port where the CAR node service.js is listening
+# for recognized commands from the porcupine process
 
+target_url = "http://localhost:3000"
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain', 'Connection': 'close'}
 
-data0 = {'msg': 'hey auto bot', 'cmd': 'wake'}
-data1 = {'msg': 'i will drive now', 'cmd': 'manual'}
-data2 = {'msg': 'drive for me', 'cmd': 'autonomous'}
+# msg is the phrase porcupine is trying to detected
+# cmd is the associated command identifier sent to the CAR server
+data0 = {'msg': 'i will drive now', 'cmd': 'manual'}
+data1 = {'msg': 'drive for me', 'cmd': 'autonomous'}
+data2 = {'msg': 'hey auto bot', 'cmd': 'wake'}
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../binding/python'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../resources/util/python'))
@@ -93,9 +97,14 @@ class PorcupineDemo(Thread):
 
         num_keywords = len(self._keyword_file_paths)
 
+        # was [0]
         keyword_names = list()
         for x in self._keyword_file_paths:
-            keyword_names.append(os.path.basename(x).replace('.ppn', '').replace('_compressed', '').split('_')[0])
+            decomposed_path = (os.path.basename(x).replace('.ppn', '').replace('_compressed', '').split('_'))
+            decomposed_path.pop()
+            decomposed_path.pop()
+            keyword_names.append(decomposed_path)
+            # keyword_names.append(os.path.basename(x).replace('.ppn', '').replace('_compressed', '').split('_'))
 
         print('listening for:')
         for keyword_name, sensitivity in zip(keyword_names, self._sensitivities):

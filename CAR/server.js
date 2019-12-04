@@ -52,7 +52,7 @@ app.post('/', function(req,res) {
   var msg = req.body.msg;
   var cmd = req.body.cmd;
   console.log("message from porcupine: " + msg);
-  console.log("command from porcupine: " + cmd);  // wake, autonomous, manual
+  console.log("  command sent via mqtt: " + cmd);  // wake, autonomous, manual
 
   //update the console status with the most recent recognized command/wake word
   client.publish('can', '{"name":"' + cmd.toString() + '"}') // wake, autonomous, manual
