@@ -3,11 +3,15 @@
 This project contains sample code for getting started sending messages back and
 forth to the car using a wizard control interface.
 
+In cases where it desirable to recognize voice commands in the car, a speech recognition process can be run to recognize key words or phrases and turn them into commands passed to the control interface.  This project contains a demo of using the Porcupine keyword detector trained to recognize three custom phrases.  
+
 ## Software Requirements
 ### Car
 1. An Apple computer running macOS (required for use with Apple text to speech system)
 
 2. NodeJS 4+
+
+3. Wake word recognition software (optional - see below)
 
 ### Control
 1. A server with NodeJS 4+ and avialble port open (default port is 8000)
@@ -36,14 +40,22 @@ of from the Common Questions area by clicking the buttons.
 
 7. (Additional) If you can serve the control interface from a known server with a public IP, then you can navigate to `<your.server.ip>:8000`
 
+8. (Optional) If you want to run the provided voice command recognizer demo, in the **CAR** directory, `cd porcupine`.  Then run `python3 demo/python/car_listener.py --keyword_file_paths resources/keyword_files/mac/i_will_drive_now_mac_2019_12_23.ppn,resources/keyword_files/mac/drive_for_me_mac_2019-12-23.ppn,resources/keyword_files/mac/hey_auto_bot_mac_2019-12-23.ppn`
+
 ### MQTT Setup
 The sample code provided points to an MQTT broker running on the same machine where the control service is running.  We recommend setting up Mosquitto using the Instructions provided at [https://mosquitto.org].
 
 ### Changing Voices on macOS
-
 You can set the default voice in your System Preferences -> Accessibilty -> Speech. I recommend you use voice with High Quality options.
 
 The system will work with any language provided by Apple. Just choose a voice for your prefered langueage, for example Kyoko for Japanese, and then send messages in Japanese from the wizard control interface.
+
+### Wake Word Recognizer
+We can use Porcupine, by Picovoice, to recognize short phrases on the CAR system.  
+The open source Porcupine repository [https://github.com/Picovoice/porcupine] is useful for evaluation of the technology.  To train custom wake words or phrases, the Picovoice Console [https://console.picovoice.ai/ppn] may be used.
+
+This demo uses a python program which instantiates a Porcupine instance to recognize three pre selected phrases.  When it recognizes a phrase it passes a matching command to the car node process via a http POST message.  The car node process then relays the command to the control service via MQTT.
+
 
 ## Citation
 If you are interested to learn more about the WoZ Way system and it's applications for remote interaction prototyping and observation, please see: https://dl.acm.org/citation.cfm?id=2998293

@@ -24,7 +24,7 @@ var http = require('http');				// http basics
 var app = express();							// instantiate express server
 var server = http.Server(app);		// connects http library to server
 var io = require('socket.io')(server);	// connect websocket library to server
-var serverPort = 8222;
+var serverPort = 8000;
 
 // MQTT messaging - specify the server you would like to use here
 var mqtt    = require('mqtt');
